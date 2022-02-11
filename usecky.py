@@ -1,24 +1,18 @@
 from math import inf
 def segments_intersection(p1,p2,p3,p4):
-    
-    x1 = p1[0]
-    y1 = p1[1]
-    x2 = p2[0]
-    y2 = p2[1]
-    x3 = p3[0]
-    y3 = p3[1]
-    x4 = p4[0]
-    y4 = p4[1]
-            
-    prvni_x = [x1,x2]
-    druhy_x = [x3,x4]
-    prvni_y = [y1,y2]
-    druhy_y = [y3,y4]
+    if p1 == p2 or p3 == p4:
+        print("Segment can't have the same endpoints")  
+        return None 
+    x1,y1 = p1[0],p1[1]
+    x2,y2 = p2[0],p2[1]
+    x3,y3 = p3[0],p3[1]
+    x4,y4 = p4[0],p4[1]
 
-    vect1x = x2-x1
-    vect1y = y2-y1
-    vect2x = x4-x3
-    vect2y = y4-y3
+    first_x,first_y = [x1,x2],[y1,y2]
+    second_x,second_y = [x3,x4],[y3,y4]
+
+    vect1x,vect1y = x2-x1,y2-y1
+    vect2x,vect2y = x4-x3,y4-y3
 
     A1 = y2-y1
     B1 = x1-x2
@@ -30,167 +24,164 @@ def segments_intersection(p1,p2,p3,p4):
 
     det = A1*B2 - A2*B1
 
-    #ROVNOBĚŽNÉ!!!
+    #PARALLEL
     if det == 0:
-        #NESVISLÉ
+        #NON-VERTICAL
         if x1 != x2:
             z = (x3-x1)/(x2-x1)
-            #Když jsou v jedné linii (ne svislé)
+            #Collinear
             if round(y1 + z*(y2-y1),9) == round(y3,9) and vect1y/vect1x == vect2y/vect2x:
-                #ŽÁDNÝ PRŮSEČÍK
-                #1. níž
-                if max(prvni_x) < min(druhy_x):
-                    print("Úsečky jsou ve stejné linii, ale neprotínají se")
+                #NO INTERSECTION
+                #1. left
+                if max(first_x) < min(second_x):
+                    print("Segments are collinear but don't intersect each other")
                     return None
-                #2. níž
-                if max (druhy_x) < min(prvni_x):
-                    print("Úsečky jsou ve stejné linii, ale neprotínají se")
+                #2. left
+                if max (second_x) < min(first_x):
+                    print("Segments are collinear but don't intersect each other")
                     return None
             
-                #JEDEN PRŮSEČÍK
-                #1. níž
-                if max(druhy_x) > max(prvni_x) and min(druhy_x) == max(prvni_x):
+                #ONE INTERSECTION
+                #1. left
+                if max(second_x) > max(first_x) and min(second_x) == max(first_x):
                     if p2 == p3:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík BC")
+                        print("Segments are collinear and intersect each other in one point p2;p3")
                         return p2
                     if p2 == p4:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík BD")
+                        print("Segments are collinear and intersect each other in one point p2;p4")
                         return p2
                     if p1 == p3:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík AC")
+                        print("Segments are collinear and intersect each other in one point p1;p3")
                         return p1
                     if p1 == p4:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík AD")
+                        print("Segments are collinear and intersect each other in one point p1;p4")
                         return p1
 
-                #2. níž
-                if max(prvni_x) > max(druhy_x) and min(prvni_x) == max(druhy_x):
+                #2. left
+                if max(first_x) > max(second_x) and min(first_x) == max(second_x):
                     if p1 == p3:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík AC")
+                        print("Segments are collinear and intersect each other in one point p1;p3")
                         return p1
                     if p1 == p4:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík AD")
+                        print("Segments are collinear and intersect each other in one point p1;p4")
                         return p1
                     if p2 == p3:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík BC")
+                        print("Segments are collinear and intersect each other in one point p2;p3")
                         return p2
                     if p2 == p4:
-                        print("Úsečky jsou ve stejné linii a mají 1 průsečík BD")
+                        print("Segments are collinear and intersect each other in one point p2;p4")
                         return p2
-                #NEKONEČNĚ MNOHO PRŮSEČÍKŮ
+                #INFINITE INTERSECTIONS
                 else:
-                    print("Úsečky jsou ve stejné linii a průsečíkem je úsečka")
+                    print("Segments are collinear and their intersection is also a segment")
                     return inf
 
-            #Když nejsou v jedné linii (ne svislé)
+            #Non-collinear (but still parallel)
             else:
-                print("Úsečky jsou rovnoběžné ostatní, ale neprotínají se")
+                print("Segments are parallel but non-collinear and thus they have no intersection")
                 return None
 
 
-        #SVISLÉ
+        #VERTICAL
         if x1 == x2:
-            #Když jsou v jedné linii (svislé)
+            #Collinear
             if x1 == x2 == x3 == x4:
-                #ŽÁDNÝ PRŮSEČÍK
-                #1. níž
-                if max(prvni_y) < min(druhy_y):
-                    print("Úsečky jsou ve stejné linii, jsou svislé, ale neprotínají se")
+                #NO INTERSECTION
+                #1. down
+                if max(first_y) < min(second_y):
+                    print("Segments are collinear and vertical but they have no intersection")
                     return None
-                #2. níž
-                if max(druhy_y) < min (prvni_y):
-                    print("Úsečky jsou ve stejné linii, jsou svislé, ale neprotínají se")
+                #2. down
+                if max(second_y) < min (first_y):
+                    print("Segments are collinear and vertical but they have no intersection")
                     return None
         
-                #JEDEN PRŮSEČÍK
-                #1. níž
-                if max(druhy_y) > max(prvni_y) and min(druhy_y) == max(prvni_y):
+                #ONE INTERSECTION
+                #1. down
+                if max(second_y) > max(first_y) and min(second_y) == max(first_y):
                     if p2 == p3:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík BC")
+                        print("Segments are collinear and vertical and intersect each other in one point p2;p3")
                         return p2
                     if p2 == p4:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík BD")
+                        print("Segments are collinear and vertical and intersect each other in one point p2;p4")
                         return p2
                     if p1 == p3:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík AC")
+                        print("Segments are collinear and vertical and intersect each other in one point p1;p3")
                         return p1
                     if p1 == p4:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík AD")
+                        print("Segments are collinear and vertical and intersect each other in one point p1;p4")
                         return p1
 
-                #2. níž
-                if max(prvni_y) > max(druhy_y) and min(prvni_y) == max(druhy_y):
+                #2. down
+                if max(first_y) > max(second_y) and min(first_y) == max(second_y):
                     if p1 == p3:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík AC")
+                        print("Segments are collinear and vertical and intersect each other in one point p1;p3")
                         return p1
                     if p1 == p4:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík AD")
+                        print("Segments are collinear and vertical and intersect each other in one point p1;p4")
                         return p1
                     if p2 == p3:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík BC")
+                        print("Segments are collinear and vertical and intersect each other in one point p2;p3")
                         return p2
                     if p2 == p4:
-                        print("Úsečky jsou rovnoběžné svislé a mají 1 průsečík BD")
+                        print("Segments are collinear and vertical and intersect each other in one point p2;p4")
                         return p2
 
-                #NEKONEČNĚ MNOHO PRŮSEČÍKŮ
+                #INFINITE INTERSECTIONS
                 else:
-                    print("Úsečky jsou svislé a průsečíkem je úsečka")
+                    print("Segments are collinear and vertical and their intersection is also a segment")
                     return inf
 
-            #Když nejsou v jedné linii (svislé)
+            #Non-collinear (but still parallel)
             else:
-                print("Úsečky jsou rovnoběžné, svislé, ale neprotínají se")
+                print("Segments are parallel and verical but non-collinear and thus they have no intersection")
                 return None
 
-
-
-    #NEJSOU ROVNOBĚŽNÉ!!!     
+    #DIVERGENT    
     else:
         rx = (B2*C1 - B1*C2)/det
         ry = (A1*C2 - A2*C1)/det
 
         px = round(rx,9)
         py = round(ry,9)
-        #print(px, py)
 
-        #NESVISLÉ
+        #NON-VERTICAL
         if x1 != x2 and x3 != x4:
-            #JEDEN PRŮSEČÍK
-            if min(prvni_x) <= px <= max(prvni_x) and min(druhy_x) <= px <= max(druhy_x):
-                print(f"Úsečky jsou různoběžné a mají průsečík {px,py} ")
+            #ONE INTERSECTION
+            if min(first_x) <= px <= max(first_x) and min(second_x) <= px <= max(second_x):
+                print(f"Segments are divergent and they intersect each other in one point {px,py} ")
                 return (px,py)
-            #ŽÁDNÝ PRŮSEČÍK
+            #NO INTERSECTION
             else:
-                print("Úsečky jsou různoběžné, ale nemají žádný průsečík")
+                print("Segments are divergent but they have no intersection")
                 return None
         
-        #PRVNÍ SVISLÁ
+        #FIRST VERICAL
         if x1 == x2:
-            #JEDEN PRŮSEČÍK
-            if min(prvni_y) <= py <= max(prvni_y) and min(druhy_x) <= px <= max(druhy_x):
-                print(f"Úsečky jsou různoběžné, 1. je svislá a mají průsečík {px,py}")
+            #ONE INTERSECTION
+            if min(first_y) <= py <= max(first_y) and min(second_x) <= px <= max(second_x):
+                print(f"Segments are divergent, 1. is vertical and they intersect each other in one point {px,py}")
                 return (px,py)
-            #ŽÁDNÝ PRŮSEČÍK
+            #NO INTERSECTION
             else:
-                print("Úsečky jsou různoběžné, 1. je svislá, ale nemají žádný průsečík")
+                print("Segments are divergent, 1. is vertical, but they have no intersection")
                 return None
 
-        #DRUHÁ SVISLÁ
+        #SECOND VERTICAL
         if x3 == x4:
-            #JEDEN PRŮSEČÍK
-            if min(prvni_x) <= px <= max(prvni_x) and min(druhy_y) <= py <= max(druhy_y):
-                print(f"Úsečky jsou různoběžné, 2. je svislá a mají průsečík {px,py}")
+            #ONE INTERSECTION
+            if min(first_x) <= px <= max(first_x) and min(second_y) <= py <= max(second_y):
+                print(f"Segments are divergent, 2. is vertical and they intersect each other in one point {px,py}")
                 return (px,py)
-            #ŽÁDNÝ PRŮSEČÍK
+            #NO INTERSECTION
             else:
-                print("Úsečky jsou různoběžné, 2. je svislá, ale nemají žádný průsečík")
+                print("Segments are divergent, 2. is vertical, but they have no intersection")
                 return None
 
 
 
 
-print(segments_intersection((0,0),(5,5),(4,4),(12,12)))
+print(segments_intersection((0,0),(0,0),(-9.5866,4),(17.16468,4.153)))
 
 
  
