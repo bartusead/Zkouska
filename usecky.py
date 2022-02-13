@@ -30,7 +30,7 @@ def segments_intersection(p1,p2,p3,p4):
         if x1 != x2:
             z = (x3-x1)/(x2-x1)
             #Collinear
-            if round(y1 + z*(y2-y1),9) == round(y3,9) and vect1y/vect1x == vect2y/vect2x:
+            if round(y1 + z*(y2-y1),9) == round(y3,9):
                 #NO INTERSECTION
                 #1. left
                 if max(first_x) < min(second_x):
@@ -181,7 +181,7 @@ def segments_intersection(p1,p2,p3,p4):
 
 
 
-print(segments_intersection((0,0),(0,0),(-9.5866,4),(17.16468,4.153)))
+print(segments_intersection((0,0),(10,0),(0,0),(5,0)))
 
 
  
