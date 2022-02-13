@@ -11,14 +11,17 @@ def squareroot(number,error):
         return None
     if number == 0:
         return 0
+    #Making new estimations (by counting an average of current estimate and number to be square-rooted divided by current estimate) until the result is accurate enough
+    iterations = 0
     while number >= 0:
         est_new = (est+(number/est))/2
-        if est - est_new < error:
+        if abs(est - est_new) < error:
+            print(f"Number of iterations: {iterations} ")
             return est_new
         est = est_new
+        iterations = iterations + 1
 
 
 
-
-print(squareroot(16526384834346486.15435484,0.0000000000001))
+print(squareroot(10000,0.1))
 
